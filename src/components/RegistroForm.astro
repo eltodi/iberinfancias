@@ -1,0 +1,149 @@
+---
+import countries from '@/assets/countries.json'
+import Modal from './Modal.astro'
+---
+
+<Modal />
+
+
+<h1 class="text-2xl font-normal mb-5 border-b pb-2 text-primary border-primary">Formulario de registro</h1> 		
+<p class="mb-8 text-gray-600 border-l border-primary px-3">
+   Por medio de este formulario, expreso formalmente mi deseo de participación en la Red Iberoamericana de Municipios por las infancias.
+   Asimismo, autorizo a que se me contacte a través de los medios indicados para tales efectos.
+</p>
+<form id="registry-form" method="POST">
+   <div class="mb-5">
+     <label for="name" class="block mb-2 text-md font-medium">Nombre completo</label>
+     <input type="text" id="name" name="name" class="bg-gray-50 border border-gray-300 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Escriba su nombre y apellidos" required />
+   </div>
+
+   <div class="mb-5">
+      <label for="email" class="block mb-2 text-md font-medium  ">Email</label>
+      <input type="email" id="email" name="email" 
+         class="block w-full p-2.5 bg-gray-50 border border-gray-300 text-sm rounded-md 
+            focus:ring-blue-500 focus:border-blue-500
+            aria-[invalid=true]:border-red-500 aria-[invalid=true]:ring-red-500   
+            aria-[invalid=false]:border-green-500 aria-[invalid=false]:ring-green-500   
+            "
+                      
+         placeholder="Correo electrónico" required />
+   </div>
+
+   <div class="mb-5">
+      <label for="telefono" class="block mb-2 text-md font-medium">Teléfono movil</label>
+      <input type="text" id="telefono" name="telefono" class="bg-gray-50 border border-gray-300  text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Escriba su número de teléfono (Whatsapp)" required />
+      <p id="helper-text-telefono" class="mt-2 text-sm text-gray-400">Escríbalo en formato internacional (código de país)</p>
+   </div>
+
+   <div class="mb-5">
+      <label for="pais" class="block mb-2 text-md font-medium  ">Pais</label>	
+      <select name="pais" id="pais" class="bg-gray-50 border border-gray-300  text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+         <option selected>Seleccione su país</option>
+         {
+            countries.map((country) => (
+               <option value={country.nameES}>{country.nameES}</option>
+            ))
+         }
+      </select>               
+   </div>
+
+   <div class="mb-5">
+      <label for="cargo" class="block mb-2 text-md font-medium  ">Cargo profesional</label>
+      <input type="text" id="cargo" name="cargo" class="bg-gray-50 border border-gray-300  text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Escriba su cargo profesional" required />
+   </div>
+
+   <div class="mb-5">
+      <label for="institucion" class="block mb-2 text-md font-medium  ">Institución</label>	
+      <input type="text" id="institucion" name="institucion" class="bg-gray-50 border border-gray-300  text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Institución en la que trabaja" required />
+   </div>   
+
+   <div class="mb-5">
+      <label class="block mb-2 text-md font-medium">Tipo de registro</label>
+      <p class="text-sm text-gray-500 mb-3">Indique si el registro lo está realizando como persona física o en representación de una institución.</p>
+      <div class="flex items-center mb-2">
+         <input id="persona_fisica" type="radio" name="tipo_registro" value="persona_fisica" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 ms-3" required>
+         <label for="persona_fisica" class="ms-3 text-base font-medium">Persona física</label>
+      </div>
+      <div class="flex items-center">
+         <input id="tipo_institucion" type="radio" name="tipo_registro" value="institucion" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 ms-3"  required>
+         <label for="tipo_institucion" class="ms-3 text-base font-medium">Institución</label>
+      </div>
+   </div>
+
+   <div class="mb-10">
+      <div class="flex items-start">
+         <div class="flex items-center h-5">
+            <input id="acepta_estatutos" type="checkbox" name="acepta_estatutos" required class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+         </div>
+         <label for="acepta_estatutos" class="ml-2 text-sm font-medium text-gray-900">
+            Confirmo que he leído y acepto los 
+            <a href="https://go.uimunici.org/ibInfanciasEstatutos" target="_blank" class="text-blue-600 hover:underline">Estatutos de la Red Iberoamericana de Municipios por las infancias</a>.
+         </label>
+      </div>
+   </div>
+
+   
+   <button id="btn-submit" type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-xl tracking-wider w-full px-5 py-2.5 text-center">Enviar registro</button>
+
+</form>
+
+<script>   
+   import { actions } from "astro:actions";   
+   import { Modal } from 'flowbite';
+
+   const form = document.querySelector('form') as HTMLFormElement;
+   const btnSubmit = document.querySelector('#btn-submit') as HTMLButtonElement;
+   const email = document.querySelector('#email') as HTMLInputElement;
+
+   email.addEventListener('change', async(e) => {      
+      const { data, error } = await actions.emailChange({ email: email.value });
+      email.setAttribute('aria-invalid', 'false');
+      if( error) {                  
+         email.setAttribute('aria-invalid', 'true');         
+         email.focus();
+         email.select();     
+      }
+   })
+
+   form.addEventListener('submit', async(e) => {      
+      e.preventDefault();      
+      btnSubmit?.setAttribute('disabled','disabled');
+      const formData = new FormData(form);
+
+      const { data, error } = await actions.registryForm(formData);
+      if( error) {
+         const $targetEl = document.getElementById('modalError'); 
+         btnSubmit.removeAttribute("disabled")        
+         if( $targetEl !== null ) {
+            $targetEl.querySelector("#data-title")!.innerHTML = "Atención!!!";
+            $targetEl.querySelector("#data-content")!.innerHTML = "Ha fallado el registro. Reviese la información introducida";
+            $targetEl.querySelector("#btn-continuar")!.innerHTML = "Cerrar";
+            $targetEl.querySelector("#btn-continuar")!.addEventListener("click", (e) =>{
+               e.preventDefault();
+               modal.hide();
+            })
+         }
+         const modal = new Modal($targetEl);   
+         modal.show();
+      }
+      if( data ){         
+         const $targetEl = document.getElementById('modalSuccess');
+         btnSubmit?.removeAttribute('disabled');
+         if( $targetEl !== null ) {
+            $targetEl.querySelector("#data-title")!.innerHTML = "Enhorabuena!!!";
+            $targetEl.querySelector("#data-content")!.innerHTML = "Registro realizado correctamente";
+            $targetEl.querySelector("#btn-continuar")!.innerHTML = "Salir";
+            $targetEl.querySelector("#btn-continuar")!.addEventListener("click", (e) =>{
+               e.preventDefault();
+               location.reload();
+            })
+         }
+         const modal = new Modal($targetEl);   
+         modal.show();         
+      }
+   })
+   
+
+
+   
+</script>

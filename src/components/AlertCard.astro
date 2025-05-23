@@ -1,0 +1,55 @@
+---
+interface Props {
+	isVisible: boolean;
+	correcto: boolean;
+	title: string;
+	message: string;
+}
+const { isVisible, correcto, title, message } = Astro.props;
+
+---
+{
+	isVisible && (
+		<div id="modal-alert" class="flex items-center justify-center bg-gray-900/70 fixed top-0 left-0 right-0 bottom-0 z-50">
+			<div class="rounded-lg bg-gray-50 px-16 py-14">
+			<div class="flex justify-center">		
+				{ 
+					( correcto === true ) &&
+						<div class="rounded-full bg-green-200 p-6">
+							<div class="flex h-16 w-16 items-center justify-center rounded-full bg-green-500 p-4">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 w-8 text-white">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+							</svg>
+							</div>
+						</div>
+				}
+				{
+					( correcto!==true ) &&
+					<div class="rounded-full bg-red-200 p-6">
+							<div class="flex h-16 w-16 items-center justify-center rounded-full bg-red-500 p-4">
+								<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xml:space="preserve">
+								<defs/>
+									<g style="stroke: none; stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+										<path d="M 5 90 c -1.28 0 -2.559 -0.488 -3.536 -1.465 c -1.953 -1.952 -1.953 -5.118 0 -7.07 l 80 -80 c 1.951 -1.952 5.119 -1.952 7.07 0 c 1.953 1.953 1.953 5.119 0 7.071 l -80 80 C 7.559 89.512 6.28 90 5 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/>
+										<path d="M 85 90 c -1.279 0 -2.56 -0.488 -3.535 -1.465 l -80 -80 c -1.953 -1.953 -1.953 -5.119 0 -7.071 c 1.953 -1.952 5.118 -1.952 7.071 0 l 80 80 c 1.953 1.952 1.953 5.118 0 7.07 C 87.56 89.512 86.279 90 85 90 z" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1;" transform=" matrix(1 0 0 1 0 0) " stroke-linecap="round"/>
+									</g>
+								</svg>
+							</div>
+						</div>				
+					
+				}
+			</div>
+			<h3 id="data-title" class="my-4 text-center text-3xl font-semibold text-gray-700" >{ title }</h3>
+			<p id="data-message" class="w-[230px] text-center font-normal text-gray-600">{ message }</p>
+				{
+					( correcto === true ) &&
+					<button id="btn-continuar" class="mx-auto mt-10 block rounded-xl border-4 border-transparent bg-primary px-6 py-3 text-center text-base font-medium text-green-100 outline-8 hover:outline hover:duration-300">Continuar</button>
+				}
+				{
+					( correcto !== true ) &&
+					<button id="btn-close" class="mx-auto mt-10 block rounded-xl border-4 border-transparent bg-red-500 px-6 py-3 text-center text-base font-medium text-red-100 outline-8 hover:outline hover:duration-300">Cerrar</button>
+				}	  
+			</div>
+		</div>
+	)
+}

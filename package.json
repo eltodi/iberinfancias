@@ -3,9 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "USE_ADAPTER=node astro dev",
+    "start": "USE_ADAPTER=node astro dev",
+    "build": "USE_ADAPTER=node astro check && astro build",
+    "preview": "USE_ADAPTER=node astro preview",
     "astro": "astro"
   },
   "dependencies": {
